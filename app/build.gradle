@@ -1,0 +1,97 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "ru.taptm.marvelcomicssample"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        buildConfigField "String", "MARVEL_API_KEY", "\"${getProperty("local.properties", "marvel_api_key")}\""
+        buildConfigField "String", "MARVEL_HASH_KEY", "\"${getProperty("local.properties", "marvel_hash")}\""
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+def room_version = "1.1.1-rc1"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: '1.2.41'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'androidx.core:core-ktx:0.3'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha01'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha01'
+
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    kapt 'com.github.bumptech.glide:compiler:4.4.0'
+
+    // Simplerecyclerview
+    implementation 'com.jaychang:simplerecyclerview:2.0.3'
+    implementation 'com.jaychang:simplerecyclerview-kotlin-android-extensions:2.0.3'
+
+    // Network
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+
+    // RxJava
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
+
+    // Moxy
+    implementation 'com.arello-mobile:moxy:1.5.3'
+    implementation 'com.arello-mobile:moxy-app-compat:1.5.3'
+    kapt 'com.arello-mobile:moxy-compiler:1.5.3'
+
+    // Leak canary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
+    // Image
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
+    implementation 'com.android.support:palette-v7:27.1.1'
+
+    // Room
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    implementation "android.arch.persistence.room:rxjava2:$room_version"
+    kapt "android.arch.persistence.room:compiler:$room_version"
+
+    // Test
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+def getProperty(String filename, String propName) {
+    def propsFile = rootProject.file(filename)
+    if (propsFile.exists()) {
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
+        if (props[propName] != null) {
+            return props[propName]
+        } else {
+            print("No such property " + propName + " in file " + filename);
+        }
+    } else {
+        print(filename + " does not exist!")
+    }
+}
