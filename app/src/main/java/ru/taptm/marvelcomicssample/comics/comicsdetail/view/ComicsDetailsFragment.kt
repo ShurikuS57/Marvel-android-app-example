@@ -54,8 +54,8 @@ class ComicsDetailsFragment: BaseFragment(), IComicsDetailsView {
     }
 
     override fun showImageFullScreen(fullImageUrl: String?) {
-        if (context != null && fullImageUrl != null && view != null) {
-            PhotoFullPopupWindow(context, R.layout.popup_photo_full, view, fullImageUrl, null)
+        if (fullImageUrl != null && view != null) {
+            PhotoFullPopupWindow(requireContext(), R.layout.popup_photo_full, view, fullImageUrl, null)
         }
     }
 

@@ -21,7 +21,7 @@ import com.github.chrisbanes.photoview.PhotoView
 import ru.taptm.marvelcomicssample.GlideApp
 import ru.taptm.marvelcomicssample.R
 
-class PhotoFullPopupWindow(internal var context: Context?, layout: Int, v: View?, imageUrl: String, bitmap: Bitmap?) : PopupWindow((context?.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.popup_photo_full, null), ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT) {
+class PhotoFullPopupWindow(private var context: Context, layout: Int, v: View?, imageUrl: String, bitmap: Bitmap?) : PopupWindow((context?.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.popup_photo_full, null), ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT) {
     internal var view: View
     internal var photoView: PhotoView
     internal var loading: ProgressBar
