@@ -9,22 +9,28 @@ import ru.taptm.marvelcomicssample.base.App
 import ru.taptm.marvelcomicssample.base.BasePresenter
 import ru.taptm.marvelcomicssample.comics.comicList.adapter.ComicsCell
 import ru.taptm.marvelcomicssample.comics.comicList.view.IComicsView
-import ru.taptm.marvelcomicssample.reposetory.AppDataStorageImpl
-import ru.taptm.marvelcomicssample.reposetory.local.RoomDatabaseStorage
+import ru.taptm.marvelcomicssample.di.DI
+import ru.taptm.marvelcomicssample.reposetory.IAppDataStorage
 import ru.taptm.marvelcomicssample.reposetory.network.response.ComicsResponse
-import ru.taptm.marvelcomicssample.reposetory.network.service.ServiceFabric
+import javax.inject.Inject
 
 
 @InjectViewState
-open class ComicsPresenter : BasePresenter<IComicsView>(), OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+class ComicsPresenter : BasePresenter<IComicsView>(), OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     private val disposable: CompositeDisposable
         get() = CompositeDisposable()
 
-    private val repository = AppDataStorageImpl(ServiceFabric.getApiService(), RoomDatabaseStorage.getInstance().favouritesDataDao())
+    @Inject
+    lateinit var repository: IAppDataStorage
+
     private var currentOffsetPage = 0
     private var totalPage = 0
     private var isFirstLoad = true
     private val cells = ArrayList<ComicsCell>()
+
+    init {
+        DI.componentManager().appComponent().inject(this)
+    }
 
     fun onSetupView() {
         if (isFirstLoad) {
@@ -48,13 +54,13 @@ open class ComicsPresenter : BasePresenter<IComicsView>(), OnLoadMoreListener, S
     }
 
     private fun checkFavouritesComics() {
-        disposable.add(repository.getAllFavourites().subscribe({ result ->
+        disposable.add(repository.getAllFavourites().subscribe { result ->
             if (result.isNotEmpty()) {
                 viewState.showFavouritesFab()
             } else {
                 viewState.hideFavouritesFab()
             }
-        }))
+        })
     }
 
     private fun checkIsFirstLoadData() {

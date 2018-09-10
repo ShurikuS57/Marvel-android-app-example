@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.squareup.leakcanary.LeakCanary
 import ru.taptm.marvelcomicssample.BuildConfig
+import ru.taptm.marvelcomicssample.di.DI
 
 class App : Application() {
 
@@ -21,6 +22,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        DI.init(this)
         initLeakDetector()
     }
 

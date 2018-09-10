@@ -16,6 +16,8 @@ import ru.taptm.marvelcomicssample.ui.SpacesItemDecoration
 import java.util.*
 
 class ComicsFragment: BaseFragment(), IComicsView {
+    override val fragmentLayout = R.layout.fragment_comics
+
     @InjectPresenter
     lateinit var presenter: ComicsPresenter
 
@@ -30,7 +32,7 @@ class ComicsFragment: BaseFragment(), IComicsView {
     private fun setupActionBar() {
         val actionBar = (activity as ComicsListActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(false)
-        actionBar?.title = getString(R.string.title_comic_details)
+        actionBar?.title = getString(R.string.title_comics_list)
     }
 
     private fun setupFab() {
@@ -51,9 +53,6 @@ class ComicsFragment: BaseFragment(), IComicsView {
 
     override fun showContent(cells: ArrayList<ComicsCell>) {
         list_comics.addCells(cells)
-    }
-    override fun getLayoutID(): Int {
-        return R.layout.fragment_comics
     }
 
     override fun showLoading() {

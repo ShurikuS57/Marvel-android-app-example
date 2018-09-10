@@ -13,6 +13,7 @@ import ru.taptm.marvelcomicssample.ui.imagefullscreen.PhotoFullPopupWindow
 import ru.taptm.marvelcomicssample.utils.ImageHelper
 
 class ComicsDetailsFragment: BaseFragment(), IComicsDetailsView {
+    override val fragmentLayout = R.layout.fragment_comics_details
 
     companion object {
         var ARG_COMICS_ID = "ARG_COMICS_ID"
@@ -38,7 +39,7 @@ class ComicsDetailsFragment: BaseFragment(), IComicsDetailsView {
     private fun setupActionBar() {
         val actionBar = (activity as ComicsListActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title = getString(R.string.title_comics_list)
+        actionBar?.title = getString(R.string.title_comic_details)
     }
 
     override fun showLoading() {
@@ -47,10 +48,6 @@ class ComicsDetailsFragment: BaseFragment(), IComicsDetailsView {
 
     override fun hideLoading() {
         root_progress_placeholder?.visibility = View.GONE
-    }
-
-    override fun getLayoutID(): Int {
-        return R.layout.fragment_comics_details
     }
 
     override fun showImageFullScreen(fullImageUrl: String?) {

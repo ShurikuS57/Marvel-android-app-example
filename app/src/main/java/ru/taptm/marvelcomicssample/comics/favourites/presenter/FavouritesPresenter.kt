@@ -6,22 +6,26 @@ import io.reactivex.disposables.CompositeDisposable
 import ru.taptm.marvelcomicssample.base.BasePresenter
 import ru.taptm.marvelcomicssample.comics.comicList.adapter.ComicsCell
 import ru.taptm.marvelcomicssample.comics.favourites.view.IFavouritesView
-import ru.taptm.marvelcomicssample.reposetory.AppDataStorageImpl
-import ru.taptm.marvelcomicssample.reposetory.local.RoomDatabaseStorage
+import ru.taptm.marvelcomicssample.di.DI
+import ru.taptm.marvelcomicssample.reposetory.IAppDataStorage
 import ru.taptm.marvelcomicssample.reposetory.network.response.ImageResponse
 import ru.taptm.marvelcomicssample.reposetory.network.response.ResultResponse
-import ru.taptm.marvelcomicssample.reposetory.network.service.ServiceFabric
+import javax.inject.Inject
 
 @InjectViewState
 class FavouritesPresenter: BasePresenter<IFavouritesView>() {
     private val disposable: CompositeDisposable
         get() = CompositeDisposable()
 
-    private val repository: AppDataStorageImpl
-        get() = AppDataStorageImpl(ServiceFabric.getApiService(), RoomDatabaseStorage.getInstance().favouritesDataDao())
+    @Inject
+    lateinit var repository: IAppDataStorage
+
+    init {
+        DI.componentManager().appComponent().inject(this)
+    }
 
     fun loadData() {
-        disposable.add(repository.getAllFavourites().subscribe({
+        disposable.add(repository.getAllFavourites().subscribe {
             data ->
             if (data.isNotEmpty()) {
                 val cells: ArrayList<ComicsCell> = ArrayList()
@@ -34,8 +38,8 @@ class FavouritesPresenter: BasePresenter<IFavouritesView>() {
                             ImageResponse(uri.toString().replace("/portrait_xlarge.jpg", ""), "jpg")
                     )
                     val cell = ComicsCell(resultResponse)
-                    cell.setOnCellClickListener {
-                        viewState.goToComicsDetailsScreen(it.id)
+                    cell.setOnCellClickListener {result ->
+                        viewState.goToComicsDetailsScreen(result.id)
                     }
                     cells.add(cell)
                 }
@@ -43,7 +47,7 @@ class FavouritesPresenter: BasePresenter<IFavouritesView>() {
             } else {
                 viewState.showPlaceHolder()
             }
-        }))
+        })
     }
 
     override fun onDestroy() {

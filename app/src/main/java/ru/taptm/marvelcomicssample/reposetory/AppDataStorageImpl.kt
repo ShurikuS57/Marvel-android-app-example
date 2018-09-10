@@ -12,9 +12,9 @@ import ru.taptm.marvelcomicssample.reposetory.network.response.ComicsResponse
 import ru.taptm.marvelcomicssample.reposetory.network.service.IApiService
 import ru.taptm.marvelcomicssample.utils.RxSchedulersProvider
 
-open class AppDataStorageImpl(private val apiService: IApiService, private val favouritesDao: IFavouritesDataDao) : AppDataStorage {
+open class AppDataStorageImpl(private val apiService: IApiService, private val favouritesDao: IFavouritesDataDao) : IAppDataStorage {
 
-    override fun getComics(offset:Int): Single<ComicsResponse> {
+    override fun getComics(offset: Int): Single<ComicsResponse> {
         return apiService.getComics(ParameterCreater.createComicsParams(offset))
                 .compose(RxSchedulersProvider.getComputationToMainTransformerSingle())
     }
@@ -30,17 +30,17 @@ open class AppDataStorageImpl(private val apiService: IApiService, private val f
     }
 
     override fun deleteFavourites(favouritesData: FavouritesData) {
-        Completable.fromCallable({
+        Completable.fromCallable {
             favouritesDao.delete(favouritesData)
-        }).subscribeOn(Schedulers.io())
+        }.subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe()
     }
 
     override fun insertFavourites(favouritesData: FavouritesData) {
-        Completable.fromCallable({
+        Completable.fromCallable {
             favouritesDao.insert(favouritesData)
-        }).subscribeOn(Schedulers.io())
+        }.subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe()
     }

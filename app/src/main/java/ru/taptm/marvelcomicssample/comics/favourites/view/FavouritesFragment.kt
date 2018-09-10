@@ -14,6 +14,8 @@ import ru.taptm.marvelcomicssample.comics.favourites.presenter.FavouritesPresent
 import ru.taptm.marvelcomicssample.ui.SpacesItemDecoration
 
 class FavouritesFragment: BaseFragment(), IFavouritesView {
+    override val fragmentLayout = R.layout.fragment_favourites
+
     @InjectPresenter
     lateinit var presenter: FavouritesPresenter
 
@@ -36,7 +38,7 @@ class FavouritesFragment: BaseFragment(), IFavouritesView {
     override fun showComicsList(cells: ArrayList<ComicsCell>) {
         frame_place_holder.visibility = View.GONE
         list_comics.removeAllCells()
-        list_comics.addCells(cells)
+        list_comics.addCells(0, cells)
     }
 
     override fun showLoading() {
@@ -45,10 +47,6 @@ class FavouritesFragment: BaseFragment(), IFavouritesView {
 
     override fun hideLoading() {
 
-    }
-
-    override fun getLayoutID(): Int {
-        return R.layout.fragment_favourites
     }
 
     override fun showPlaceHolder() {

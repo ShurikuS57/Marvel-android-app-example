@@ -1,6 +1,7 @@
 package ru.taptm.marvelcomicssample.base
 
 import android.os.Bundle
+import android.support.annotation.LayoutRes
 import android.widget.Toast
 import com.arellomobile.mvp.MvpAppCompatActivity
 
@@ -8,11 +9,12 @@ abstract class BaseActivity : MvpAppCompatActivity(), IBaseView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutID())
+        setContentView(activityLayout)
         setUpView()
     }
 
-    protected abstract fun getLayoutID(): Int
+    @get:LayoutRes
+    protected abstract val activityLayout: Int
 
     open fun setUpView() {}
 

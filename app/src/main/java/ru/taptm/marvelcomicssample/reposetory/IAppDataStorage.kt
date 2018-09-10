@@ -5,7 +5,7 @@ import io.reactivex.Single
 import ru.taptm.marvelcomicssample.reposetory.local.FavouritesData
 import ru.taptm.marvelcomicssample.reposetory.network.response.ComicsResponse
 
-interface AppDataStorage {
+interface IAppDataStorage {
     fun getComics(offset:Int): Single<ComicsResponse>
     fun getComicsDetails(comicsId: Int): Single<ComicsResponse>
 

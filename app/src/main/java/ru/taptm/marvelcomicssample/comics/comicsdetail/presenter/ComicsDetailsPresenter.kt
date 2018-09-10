@@ -8,12 +8,12 @@ import ru.taptm.marvelcomicssample.base.App
 import ru.taptm.marvelcomicssample.base.BasePresenter
 import ru.taptm.marvelcomicssample.comics.comicsdetail.model.ComicsDetailsModel
 import ru.taptm.marvelcomicssample.comics.comicsdetail.view.IComicsDetailsView
-import ru.taptm.marvelcomicssample.reposetory.AppDataStorageImpl
+import ru.taptm.marvelcomicssample.di.DI
+import ru.taptm.marvelcomicssample.reposetory.IAppDataStorage
 import ru.taptm.marvelcomicssample.reposetory.local.FavouritesData
-import ru.taptm.marvelcomicssample.reposetory.local.RoomDatabaseStorage
-import ru.taptm.marvelcomicssample.reposetory.network.service.ServiceFabric
 import ru.taptm.marvelcomicssample.utils.RxSchedulersProvider
 import java.util.*
+import javax.inject.Inject
 
 @InjectViewState
 class ComicsDetailsPresenter: BasePresenter<IComicsDetailsView>() {
@@ -21,11 +21,15 @@ class ComicsDetailsPresenter: BasePresenter<IComicsDetailsView>() {
     private var isFavourites: Boolean = false
     private var favouritesItem: FavouritesData? = null
 
-    private val repository:AppDataStorageImpl
-            get() = AppDataStorageImpl(ServiceFabric.getApiService(), RoomDatabaseStorage.getInstance().favouritesDataDao())
+    @Inject
+    lateinit var repository: IAppDataStorage
 
     private val disposable: CompositeDisposable
         get() = CompositeDisposable()
+
+    init {
+        DI.componentManager().appComponent().inject(this)
+    }
 
     fun loadData(comicsId: Int) {
         if (comicsId > 0) {
@@ -49,7 +53,7 @@ class ComicsDetailsPresenter: BasePresenter<IComicsDetailsView>() {
 
     private fun loadFavourites() {
         disposable.add(repository.getFavourites(comicsModel?.getComicsId() ?: 0)
-                .subscribe({
+                .subscribe {
                     if (it.isNotEmpty()) {
                         isFavourites = true
                         favouritesItem = it[0]
@@ -59,7 +63,7 @@ class ComicsDetailsPresenter: BasePresenter<IComicsDetailsView>() {
                         favouritesItem = null
                         viewState.showDeselectedFavouritesStart()
                     }
-                }))
+                })
     }
 
     fun onClickImage() {

@@ -29,6 +29,7 @@ android {
 }
 
 def room_version = "1.1.1"
+def dagger = "2.16"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -38,6 +39,11 @@ dependencies {
     implementation 'androidx.core:core-ktx:0.3'
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha05'
     implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha05'
+
+    // Dagger
+    implementation "com.google.dagger:dagger:$dagger"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger"
+    kapt "com.google.dagger:dagger-compiler:$dagger"
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.8.0'
