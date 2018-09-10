@@ -2,7 +2,6 @@ package ru.taptm.marvelcomicssample.comics.comicsdetail.presenter
 
 import android.widget.Toast
 import com.arellomobile.mvp.InjectViewState
-import io.reactivex.disposables.CompositeDisposable
 import ru.taptm.marvelcomicssample.R
 import ru.taptm.marvelcomicssample.base.App
 import ru.taptm.marvelcomicssample.base.BasePresenter
@@ -23,9 +22,6 @@ class ComicsDetailsPresenter: BasePresenter<IComicsDetailsView>() {
 
     @Inject
     lateinit var repository: IAppDataStorage
-
-    private val disposable: CompositeDisposable
-        get() = CompositeDisposable()
 
     init {
         DI.componentManager().appComponent().inject(this)
@@ -84,10 +80,5 @@ class ComicsDetailsPresenter: BasePresenter<IComicsDetailsView>() {
                         imageUrl = it.getImageUrl()))
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposable.clear()
     }
 }

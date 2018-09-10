@@ -3,30 +3,21 @@ package ru.taptm.marvelcomicssample.comics.comicList.presenter
 import android.support.v4.widget.SwipeRefreshLayout
 import com.arellomobile.mvp.InjectViewState
 import com.jaychang.srv.OnLoadMoreListener
-import io.reactivex.disposables.CompositeDisposable
 import ru.taptm.marvelcomicssample.R
 import ru.taptm.marvelcomicssample.base.App
 import ru.taptm.marvelcomicssample.base.BasePresenter
-import ru.taptm.marvelcomicssample.comics.comicList.adapter.ComicsCell
 import ru.taptm.marvelcomicssample.comics.comicList.view.IComicsView
 import ru.taptm.marvelcomicssample.di.DI
-import ru.taptm.marvelcomicssample.reposetory.IAppDataStorage
-import ru.taptm.marvelcomicssample.reposetory.network.response.ComicsResponse
+import ru.taptm.marvelcomicssample.interactor.ComicsInteractor
 import javax.inject.Inject
 
 
 @InjectViewState
 class ComicsPresenter : BasePresenter<IComicsView>(), OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
-    private val disposable: CompositeDisposable
-        get() = CompositeDisposable()
-
     @Inject
-    lateinit var repository: IAppDataStorage
+    lateinit var comicsIntaractor: ComicsInteractor
 
-    private var currentOffsetPage = 0
-    private var totalPage = 0
     private var isFirstLoad = true
-    private val cells = ArrayList<ComicsCell>()
 
     init {
         DI.componentManager().appComponent().inject(this)
@@ -41,12 +32,17 @@ class ComicsPresenter : BasePresenter<IComicsView>(), OnLoadMoreListener, SwipeR
 
     private fun loadMoreData() {
         checkIsFirstLoadData()
-        disposable.add(repository.getComics(currentOffsetPage)
+        disposable.add(comicsIntaractor
+                .getComics()
                 .subscribe({ result ->
                     run(hideLoading)
-                    currentOffsetPage += result.dataResponse.count?: 0
-                    totalPage = result.dataResponse.total?: 0
-                    prepareComicsList(result)
+                    result.forEach {
+                        it.setOnCellClickListener { comics ->
+                            viewState.goToComicsDetailsScreen(comics.id)
+                        }
+                    }
+                    viewState.clearComicsList()
+                    viewState.showContent(result)
                 }, { e ->
                     viewState.hideLoading()
                     viewState.showToast(App.context().resources.getString(R.string.error_load_comics_list) + " : ${e.message}")
@@ -54,13 +50,15 @@ class ComicsPresenter : BasePresenter<IComicsView>(), OnLoadMoreListener, SwipeR
     }
 
     private fun checkFavouritesComics() {
-        disposable.add(repository.getAllFavourites().subscribe { result ->
-            if (result.isNotEmpty()) {
-                viewState.showFavouritesFab()
-            } else {
-                viewState.hideFavouritesFab()
-            }
-        })
+        disposable.add(comicsIntaractor
+                .getAllFavourites()
+                .subscribe { result ->
+                    if (result.isNotEmpty()) {
+                        viewState.showFavouritesFab()
+                    } else {
+                        viewState.hideFavouritesFab()
+                    }
+                })
     }
 
     private fun checkIsFirstLoadData() {
@@ -71,7 +69,7 @@ class ComicsPresenter : BasePresenter<IComicsView>(), OnLoadMoreListener, SwipeR
     }
 
     override fun shouldLoadMore(): Boolean {
-        return currentOffsetPage < totalPage
+        return comicsIntaractor.isShouldLoadMore()
     }
 
     override fun onLoadMore() {
@@ -79,31 +77,9 @@ class ComicsPresenter : BasePresenter<IComicsView>(), OnLoadMoreListener, SwipeR
     }
 
     override fun onRefresh() {
-        currentOffsetPage = 0
-        cells.clear()
+        comicsIntaractor.clearComicsData()
         viewState.clearComicsList()
         loadMoreData()
-    }
-
-    private fun prepareComicsList(result: ComicsResponse) {
-        result.dataResponse.results?.let {
-            val resultData = result.dataResponse.results
-
-            resultData?.forEach {
-                val cell = ComicsCell(it)
-                cell.setOnCellClickListener {
-                    viewState.goToComicsDetailsScreen(it.id)
-                }
-                cells.add(cell)
-            }
-            viewState.clearComicsList()
-            viewState.showContent(cells)
-        }
-    }
-
-    override fun destroyView(view: IComicsView?) {
-        super.destroyView(view)
-        disposable.clear()
     }
 
     fun onFavouritesFabClick() {

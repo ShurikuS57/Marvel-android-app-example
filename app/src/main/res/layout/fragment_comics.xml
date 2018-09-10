@@ -2,7 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
@@ -17,7 +18,6 @@
             android:id="@+id/list_comics"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/grey_cc"
             app:srv_gridSpanCount="2"
             app:srv_layoutMode="grid"
             app:srv_loadMoreView="@layout/layout_load_more" />

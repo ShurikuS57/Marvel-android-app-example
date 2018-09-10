@@ -2,7 +2,6 @@ package ru.taptm.marvelcomicssample.comics.favourites.presenter
 
 import android.net.Uri
 import com.arellomobile.mvp.InjectViewState
-import io.reactivex.disposables.CompositeDisposable
 import ru.taptm.marvelcomicssample.base.BasePresenter
 import ru.taptm.marvelcomicssample.comics.comicList.adapter.ComicsCell
 import ru.taptm.marvelcomicssample.comics.favourites.view.IFavouritesView
@@ -14,8 +13,6 @@ import javax.inject.Inject
 
 @InjectViewState
 class FavouritesPresenter: BasePresenter<IFavouritesView>() {
-    private val disposable: CompositeDisposable
-        get() = CompositeDisposable()
 
     @Inject
     lateinit var repository: IAppDataStorage
@@ -48,10 +45,5 @@ class FavouritesPresenter: BasePresenter<IFavouritesView>() {
                 viewState.showPlaceHolder()
             }
         })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposable.clear()
     }
 }
