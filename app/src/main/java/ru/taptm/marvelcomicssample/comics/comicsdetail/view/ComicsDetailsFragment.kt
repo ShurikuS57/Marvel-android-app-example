@@ -27,7 +27,7 @@ class ComicsDetailsFragment: BaseFragment(), IComicsDetailsView {
             presenter.loadData(it.getInt(ARG_COMICS_ID, 0))
         }
         imageView.setOnClickListener {
-            presenter.onClickImage()
+            presenter.onClickFullImage()
         }
         image_favourites.setOnClickListener {
             presenter.onClickFavourites()

@@ -5,6 +5,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ru.taptm.marvelcomicssample.interactor.ComicsInteractor
+import ru.taptm.marvelcomicssample.interactor.FavouritesInteractor
 import ru.taptm.marvelcomicssample.reposetory.IAppDataStorage
 import ru.taptm.marvelcomicssample.reposetory.local.RoomDatabaseStorage
 import javax.inject.Singleton
@@ -15,6 +16,11 @@ class AppModule(private val context: Context) {
     @Provides
     fun comicsInteractor(repository: IAppDataStorage): ComicsInteractor {
         return ComicsInteractor(repository)
+    }
+
+    @Provides
+    fun favouritesInteractor(repository: IAppDataStorage): FavouritesInteractor {
+        return FavouritesInteractor(repository)
     }
 
     @Provides

@@ -33,7 +33,7 @@ class ComicsPresenter : BasePresenter<IComicsView>(), OnLoadMoreListener, SwipeR
     private fun loadMoreData() {
         checkIsFirstLoadData()
         disposable.add(comicsIntaractor
-                .getComics()
+                .loadComics()
                 .subscribe({ result ->
                     run(hideLoading)
                     result.forEach {
