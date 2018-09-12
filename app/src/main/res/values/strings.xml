@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MarvelComicsSample</string>
     <string name="title_comics_list">Сomic book list</string>
-    <string name="error_load_comics_list">Error load comics</string>
+    <string name="error_load_comics_list">Error load comics: %s</string>
     <string name="authors">Authors:</string>
     <string name="no_data">no data to display</string>
     <string name="title_favourites">Favourites</string>

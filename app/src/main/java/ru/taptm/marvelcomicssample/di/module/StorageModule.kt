@@ -1,5 +1,7 @@
 package ru.taptm.marvelcomicssample.di.module
 
+import android.arch.persistence.room.Room
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ru.taptm.marvelcomicssample.reposetory.AppDataStorageImpl
@@ -22,5 +24,14 @@ class StorageModule {
     @Singleton
     fun provideFavoritesDataDao(database: RoomDatabaseStorage): IFavouritesDataDao {
         return database.favouritesDataDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabase(context: Context) : RoomDatabaseStorage {
+        return Room.databaseBuilder(context,
+                RoomDatabaseStorage::class.java, "Sample.db")
+                .fallbackToDestructiveMigration()
+                .build()
     }
 }

@@ -1,9 +1,7 @@
 package ru.taptm.marvelcomicssample.comics.comicsdetail.presenter
 
-import android.widget.Toast
 import com.arellomobile.mvp.InjectViewState
 import ru.taptm.marvelcomicssample.R
-import ru.taptm.marvelcomicssample.base.App
 import ru.taptm.marvelcomicssample.base.BasePresenter
 import ru.taptm.marvelcomicssample.comics.comicsdetail.model.ComicsDetailsModel
 import ru.taptm.marvelcomicssample.comics.comicsdetail.view.IComicsDetailsView
@@ -40,9 +38,7 @@ class ComicsDetailsPresenter : BasePresenter<IComicsDetailsView>() {
                         viewState.showComicsDetails(comicsModel)
                     }
                 }, { error ->
-                    Toast.makeText(App.context(),
-                            String.format(App.context().getText(R.string.error_fail_connect).toString(), error.message),
-                            Toast.LENGTH_LONG).show()
+                    viewState.showToastFormat(R.string.error_fail_connect, error.message)
                 }))
     }
 

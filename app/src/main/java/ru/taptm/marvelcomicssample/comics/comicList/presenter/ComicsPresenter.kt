@@ -4,7 +4,6 @@ import android.support.v4.widget.SwipeRefreshLayout
 import com.arellomobile.mvp.InjectViewState
 import com.jaychang.srv.OnLoadMoreListener
 import ru.taptm.marvelcomicssample.R
-import ru.taptm.marvelcomicssample.base.App
 import ru.taptm.marvelcomicssample.base.BasePresenter
 import ru.taptm.marvelcomicssample.comics.comicList.view.IComicsView
 import ru.taptm.marvelcomicssample.di.DI
@@ -45,7 +44,7 @@ class ComicsPresenter : BasePresenter<IComicsView>(), OnLoadMoreListener, SwipeR
                     viewState.showContent(result)
                 }, { e ->
                     viewState.hideLoading()
-                    viewState.showToast(App.context().resources.getString(R.string.error_load_comics_list) + " : ${e.message}")
+                    viewState.showToastFormat(R.string.error_load_comics_list, e.message)
                 }))
     }
 

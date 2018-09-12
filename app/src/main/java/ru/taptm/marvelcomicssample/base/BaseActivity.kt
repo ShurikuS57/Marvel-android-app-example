@@ -21,4 +21,10 @@ abstract class BaseActivity : MvpAppCompatActivity(), IBaseView {
     override fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+    override fun showToastFormat(stringFormatRes: Int, stringConcat: String?) {
+        Toast.makeText(this,
+                String.format(resources.getString(stringFormatRes).toString(), stringConcat),
+                Toast.LENGTH_LONG).show()
+    }
 }

@@ -1,5 +1,6 @@
 package ru.taptm.marvelcomicssample.di.module
 
+import android.content.Context
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -35,13 +36,13 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(context: Context): OkHttpClient {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         // клиент добавлен для отладки
         return OkHttpClient.Builder()
                 .addInterceptor(httpLoggingInterceptor)
-                .addInterceptor(NetworkCheckInterceptor())
+                .addInterceptor(NetworkCheckInterceptor(context))
                 .addInterceptor(ApiKeyInterceptor())
                 .connectTimeout(CONNECT_TIMEOUT_IN_SECONDS.toLong(), TimeUnit.SECONDS)
                 .readTimeout(READ_TIMEOUT_IN_SECONDS.toLong(), TimeUnit.SECONDS)

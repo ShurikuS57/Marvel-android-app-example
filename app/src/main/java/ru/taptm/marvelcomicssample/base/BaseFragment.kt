@@ -27,4 +27,10 @@ abstract class BaseFragment : MvpAppCompatFragment(), IBaseView {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
+    override fun showToastFormat(stringFormatRes: Int, stringConcat: String?) {
+        Toast.makeText(requireContext(),
+                String.format(resources.getString(stringFormatRes).toString(), stringConcat),
+                Toast.LENGTH_LONG).show()
+    }
+
 }
