@@ -26,3 +26,31 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    config = [applicationId    : 'ru.taptm.marvelcomicssample',
+              versionName      : '1.0',
+              minSdkVersion    : 21,
+              targetSdkVersion : 28,
+              compileSdkVersion: 28]
+
+    lib = [supportLibraryVersion          : '28.0.0-rc02',
+           constraintLayoutVersion        : '1.1.3',
+           ktxVersion                     : '0.3',
+           navigationVersion              : "1.0.0-alpha05",
+           daggerVersion                  : '2.16',
+           glideVersion                   : '4.8.0',
+           simplerecyclerviewVersion      : '2.0.5',
+           retrofitVersion                : '2.4.0',
+           okHttpVersion                  : '3.9.0',
+           rxJavaVersion                  : '2.1.15',
+           rxAndroidVersion               : '2.0.2',
+           moxyVersion                    : '1.5.5',
+           leakcanaryVersion              : '1.5.4',
+           photoViewVersion               : '2.1.3',
+           roomVersion                    : '1.1.1',
+           junitVersion                   : '4.12',
+           espressoVersion                : '3.0.2',
+           testRunnerVersion              : '1.0.2']
+
+}
